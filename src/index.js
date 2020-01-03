@@ -53,8 +53,24 @@ class App extends React.Component {
 
   renderTodos = () => {
     return this.state.todos.map(item => {
-      return <TodoItem key={item.id} item={item} />;
+      return (
+        <TodoItem key={item.id} item={item} deleteItem={this.deleteItem} />
+      );
     });
+  };
+
+  deleteItem = id => {
+    fetch(`http://localhost:5000/todo/${id}`, {
+      method: "DELETE"
+    })
+      .then(
+        this.setState({
+          todos: this.state.todos.filter(item => {
+            return item.id !== id;
+          })
+        })
+      )
+      .catch(error => console.log("deleteItem Error ", error));
   };
 
   render() {
